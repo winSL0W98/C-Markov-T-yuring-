@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace ConsoleApplication2
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            int[] MN = new int[2];
+            string buf;
+            StreamReader file = new StreamReader("input.txt");
+            buf = file.ReadLine();
+            string[] separation_MN = buf.Split(new Char[] { ' ' });
+            for (int i = 0; i < separation_MN.Length; i++)
+            {
+                MN[i] = Convert.ToInt32(separation_MN[i]);
+
+            }
+
+            List<int[]> arr = new List<int[]>();
+            for (int i = 0; i < MN[1]; i++)
+            {
+                int[] buf_arr = new int[5];
+                buf = file.ReadLine();
+                string[] separation_arr = buf.Split(new Char[] { ' ' });
+                for (int j = 0; j < separation_arr.Length; j++)
+                {
+                    buf_arr[j] = Convert.ToInt32(separation_arr[j]);
+                }
+                arr.Add(buf_arr);
+            }
+
+            buf = file.ReadLine();
+            List<int> word = new List<int>();
+            for (int i = 0; i < buf.Length; i++)
+            {
+                word.Add(Convert.ToInt32(Convert.ToString(buf[i])));
+            }
+
+            int q = 1;
+            int value = word[0];
+            int stroke = 0;
+            while (q != 0)
+            {
+
+                for (int i = 0; i < arr.Count; i++)
+                {
+
+                    if (q == arr[i][0] && value == arr[i][1])
+                    {
+
+                        q = arr[i][2];
+                        word[stroke] = arr[i][3];
+                        stroke += arr[i][4];
+                   /*     if (stroke < 0)
+                        {
+                            stroke = 0;
+                           word.Insert(0, 0);
+                       } */
+                        value = word[stroke];
+                        break;
+                    }
+             /*     if (stroke == word.Count - 1)
+                    {
+                        word.Add(0);
+                    } 
+                    */
+                }
+
+            }
+            using (var output = File.AppendText("C:\\Users\\Пользователь\\Desktop\\ПАВЛОВСКАЯ\\ConsoleApplication17\\ConsoleApplication17\\bin\\Debug\\output.txt"))
+            {
+
+                for (int i = 0; i < word.Count; i++)
+                {
+
+                    output.Write(word[i]);
+                }
+
+            }
+        }
+    }
+}
+
+
+
+
+
+
+input
+
+
+2 2
+1 0 1 0 1
+1 1 0 0 0
+011010
