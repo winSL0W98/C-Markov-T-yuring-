@@ -1,0 +1,110 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.IO;
+
+namespace ConsoleApplication2
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int N;
+            string buf;
+            StreamReader file = new StreamReader("input.txt");
+            buf = file.ReadLine();
+
+            N = Convert.ToInt32(Convert.ToString(buf));
+
+            List<string[]> arr = new List<string[]>();
+            for (int i = 0; i < 8; i++)
+            {
+                string[] BUF = new string[3 + N];
+                buf = file.ReadLine();
+                string[] splitt = buf.Split(new Char[] { ' ' });
+                for (int j = 0; j < splitt.Length; j++)
+                {
+                    BUF[j] = splitt[j];
+                }
+                arr.Add(BUF);
+            }
+            int s = 1;
+            int[] sequence = new int[N]; //порядковые номера
+            for (int i = 0; i < N; i++, s++)
+            {
+                sequence[i] = s;
+            }
+            int[] counter = new int[N]; //счетчик для подсчета единиц
+            int[] conse = new int[8];
+            int temp_s = 0;
+            int temp_c = 0;
+            string[] temp_a = new string[8];
+
+            for (int j = 3, z = 0; j <= N + 2; j++, z++)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    if (arr[i][j] == "1")
+                        counter[z]++;
+                }
+            }
+            bool flag = true;
+            while (flag)
+            {
+                for (int z = 0, j = 3; z < N - 1; z++, j++)
+                {
+                    if (counter[z] > counter[z + 1])
+                    {
+                        temp_s = sequence[z];
+                        sequence[z] = sequence[z + 1];
+                        sequence[z + 1] = temp_s;
+
+                        temp_c = counter[z];
+                        counter[z] = counter[z + 1];
+                        counter[z + 1] = temp_c;
+                        z = -1;
+                        for (int i = 0; i < 8; i++)
+                        {
+                            temp_a[i] = arr[i][j];
+                            arr[i][j] = arr[i][j + 1];
+                            arr[i][j + 1] = temp_a[i];
+                        }
+                        j = 2;
+                    }
+                }
+                flag = false;
+                break;
+            }
+            flag = true;
+            while (flag)
+            {
+                for (int j = 3; j < N + 2; j++)
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        if ((arr[i][j] == "1") && (arr[i][j + 1] == "0"))
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                }
+                using (var output = File.AppendText("C:\\Users\\Пользователь\\Desktop\\ПАВЛОВСКАЯ\\4_Лаба_МЛИТА\\4_Лаба_МЛИТА\\bin\\Debug\\output.txt"))
+                {
+                    if (flag == true)
+                    {
+                        for (int z = 0; z < N; z++)
+                            output.Write(sequence[z] + " ");
+                    }
+                    else
+                    {
+                        output.Write("-1");
+                    }
+                }
+                flag = false;
+                break;
+            }
+        }
+    }
+}
+
